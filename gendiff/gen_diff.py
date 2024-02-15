@@ -1,7 +1,7 @@
 import json
 
 
-def generate_diff(filepath1, filepath2):
+def generate_diff(filepath1, filepath2):  # noqa C901
 
     data1 = json.load(open(filepath1))
     data2 = json.load(open(filepath2))
@@ -25,7 +25,7 @@ def generate_diff(filepath1, filepath2):
                 if data1_str[key] == data2_str[key]:
                     result += f'    {key}: {data1_str[key]}\n'
                 else:
-                    result += f'  - {key}: {data1_str[key]}\n  + {key}: {data2_str[key]}\n'
+                    result += f'  - {key}: {data1_str[key]}\n  + {key}: {data2_str[key]}\n'  # noqa E501
             else:
                 result += f'  - {key}: {data1_str[key]}\n'
         else:
