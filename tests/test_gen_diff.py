@@ -25,13 +25,16 @@ def test_gen_diff():
     correct_result_json = read(get_fixture_path('expected_results.txt'))
     correct_result_stylish = read(get_fixture_path('result_stylish.txt'))
     correct_result_plain = read(get_fixture_path('result_plain.txt'))
+    correct_result_format_json = read(get_fixture_path('result_json.txt'))
 
     result_with_json = generate_diff(json_path1, json_path2)
     result_with_yml = generate_diff(yml_path1, yml_path2)
     recurse_result_with_json = generate_diff(recurse_json_path1, recurse_json_path2)
     recurse_result_with_yml = generate_diff(recurse_yml_path1, recurse_yml_path2)
     plain_result_with_json = generate_diff(recurse_json_path1, recurse_json_path2, 'plain')
-    plain_result_with_yml = generate_diff(recurse_yml_path1, recurse_json_path2, 'plain')
+    plain_result_with_yml = generate_diff(recurse_yml_path1, recurse_yml_path2, 'plain')
+    json_result_with_json = generate_diff(recurse_json_path1, recurse_json_path2, 'json')
+    json_result_with_yml = generate_diff(recurse_yml_path1, recurse_yml_path2, 'json')
 
 
     assert result_with_json == correct_result_json
@@ -40,4 +43,5 @@ def test_gen_diff():
     assert recurse_result_with_yml == correct_result_stylish
     assert plain_result_with_json == correct_result_plain
     assert plain_result_with_yml == correct_result_plain
-    
+    assert json_result_with_json == correct_result_format_json
+    assert json_result_with_yml == correct_result_format_json
