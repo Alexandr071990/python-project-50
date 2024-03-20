@@ -17,8 +17,8 @@ def test_gen_diff():
     yml_path2 = get_fixture_path('file2.yml')
     json_path1 = get_fixture_path('file1.json')
     json_path2 = get_fixture_path('file2.json')
-    recurse_yml_path1 = get_fixture_path('recurse_file1.yaml')
-    recurse_yml_path2 = get_fixture_path('recurse_file2.yaml')
+    recurse_yml_path1 = get_fixture_path('recurse_file1.yml')
+    recurse_yml_path2 = get_fixture_path('recurse_file2.yml')
     recurse_json_path1 = get_fixture_path('recurse_file1.json')
     recurse_json_path2 = get_fixture_path('recurse_file2.json')
 
