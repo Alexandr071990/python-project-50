@@ -13,4 +13,4 @@ def parse(data, format: str):
         return json.loads(data)
     if format == 'yaml' or format == 'yml':
         return yaml.safe_load(data)
-    raise Exception(f"No such method for format: {format}")
+    raise ValueError(f"No such method for format: {format}")

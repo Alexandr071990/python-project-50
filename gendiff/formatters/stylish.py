@@ -9,7 +9,7 @@ def transform_bool(value):
         return value
 
 
-def stylish(data, replacer=' ', spases_count=4):  # noqa: C901
+def get_stylish_format(data, replacer=' ', spases_count=4):  # noqa: C901
     dict_ = ['{']
 
     def dict_to_str(data, level):

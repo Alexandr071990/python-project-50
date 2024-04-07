@@ -1,4 +1,4 @@
-from gendiff.generate_diff import generate_diff
+from gendiff import generate_diff
 import os
 
 
@@ -12,7 +12,7 @@ def read(file_path):
         result = f.read()
     return result
 
-def test_gen_diff():
+def test_generate_diff():
     yml_path1 = get_fixture_path('file1.yml')
     yml_path2 = get_fixture_path('file2.yml')
     json_path1 = get_fixture_path('file1.json')

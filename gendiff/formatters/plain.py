@@ -1,3 +1,6 @@
+from gendiff.data_parser import COMMON, ADD, REMOVE
+
+
 def transform_bool(value):
     if value is True:
         return 'true'
@@ -47,22 +50,22 @@ def get_updated(message):
     return message['updated']
 
 
-def plain(data):  # noqa C901
+def get_plain_format(data):  # noqa C901
     result = []
 
     def dict_to_str(data, start_path=[]):
         for key, val in data.items():
-            orig_key = key[2:]
+            orig_key = key[len(ADD):]
             path = start_path + [orig_key]
             messages = message_plain(path, val, data.get(f"+ {orig_key}"))
 
-            if key.startswith(('  ')) and isinstance(val, dict):
+            if key.startswith(COMMON) and isinstance(val, dict):
                 dict_to_str(val, path)
-            elif key.startswith(('- ')) and f"+ {orig_key}" in data:
+            elif key.startswith(REMOVE) and f"{ADD}{orig_key}" in data:
                 result.append(get_updated(messages))
-            elif key.startswith(('- ')) and f"+ {orig_key}" not in data:
+            elif key.startswith(REMOVE) and f"{ADD}{orig_key}" not in data:
                 result.append(get_removed(messages))
-            elif key.startswith(('+ ')) and f"- {orig_key}" not in data:
+            elif key.startswith(ADD) and f"{REMOVE}{orig_key}" not in data:
                 result.append(get_added(messages))
 
         return '\n'.join(result)
