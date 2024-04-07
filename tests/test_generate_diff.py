@@ -1,47 +1,54 @@
+import pytest
+
 from gendiff import generate_diff
-import os
+from tests import get_path
 
 
-def get_fixture_path(file_name):
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(current_dir, 'fixtures', file_name)
-
-
-def read(file_path):
-    with open(file_path, 'r') as f:
-        result = f.read()
-    return result
-
-def test_generate_diff():
-    yml_path1 = get_fixture_path('file1.yml')
-    yml_path2 = get_fixture_path('file2.yml')
-    json_path1 = get_fixture_path('file1.json')
-    json_path2 = get_fixture_path('file2.json')
-    recurse_yml_path1 = get_fixture_path('recurse_file1.yaml')
-    recurse_yml_path2 = get_fixture_path('recurse_file2.yaml')
-    recurse_json_path1 = get_fixture_path('recurse_file1.json')
-    recurse_json_path2 = get_fixture_path('recurse_file2.json')
-
-    correct_result_json = read(get_fixture_path('expected_results.txt'))
-    correct_result_stylish = read(get_fixture_path('result_stylish.txt'))
-    correct_result_plain = read(get_fixture_path('result_plain.txt'))
-    correct_result_format_json = read(get_fixture_path('result_json.txt'))
-
-    result_with_json = generate_diff(json_path1, json_path2)
-    result_with_yml = generate_diff(yml_path1, yml_path2)
-    recurse_result_with_json = generate_diff(recurse_json_path1, recurse_json_path2)
-    recurse_result_with_yml = generate_diff(recurse_yml_path1, recurse_yml_path2)
-    plain_result_with_json = generate_diff(recurse_json_path1, recurse_json_path2, 'plain')
-    plain_result_with_yml = generate_diff(recurse_yml_path1, recurse_yml_path2, 'plain')
-    json_result_with_json = generate_diff(recurse_json_path1, recurse_json_path2, 'json')
-    json_result_with_yml = generate_diff(recurse_yml_path1, recurse_yml_path2, 'json')
-
-
-    assert result_with_json == correct_result_json
-    assert result_with_yml == correct_result_json
-    assert recurse_result_with_json == correct_result_stylish
-    assert recurse_result_with_yml == correct_result_stylish
-    assert plain_result_with_json == correct_result_plain
-    assert plain_result_with_yml == correct_result_plain
-    assert json_result_with_json == correct_result_format_json
-    assert json_result_with_yml == correct_result_format_json
+@pytest.mark.parametrize(
+    'path_to_file1, path_to_file2, formatter, expected',
+    [
+        (
+            'recurse_file1.json',
+            'recurse_file2.json',
+            'stylish',
+            'result_stylish.txt'
+        ),
+        (
+            'recurse_file1.yaml',
+            'recurse_file2.yaml',
+            'stylish',
+            'result_stylish.txt'
+        ),
+        (
+            'recurse_file1.json',
+            'recurse_file2.json',
+            'plain',
+            'result_plain.txt'
+        ),
+        (
+            'recurse_file1.yaml',
+            'recurse_file2.yaml',
+            'plain',
+            'result_plain.txt'
+        ),
+        (
+            'recurse_file1.json',
+            'recurse_file2.json',
+            'json',
+            'result_json.txt'
+        ),
+        (
+            'recurse_file1.yaml',
+            'recurse_file2.yaml',
+            'json',
+            'result_json.txt'
+        )
+    ]
+)
+def test_gendiff(path_to_file1, path_to_file2, formatter, expected):
+    expected_path = get_path(expected)
+    with open(expected_path, 'r') as file:
+        result_data = file.read()
+        test_path1 = get_path(path_to_file1)
+        test_path2 = get_path(path_to_file2)
+        assert generate_diff(test_path1, test_path2, formatter) == result_data
