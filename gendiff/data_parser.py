@@ -3,46 +3,37 @@ ADD = '+ '
 REMOVE = '- '
 
 
-def get_formated_keys(key):
-    return {
-        'common': f'{COMMON}{key}',
-        'add': f'{ADD}{key}',
-        'remove': f'{REMOVE}{key}'
-    }
+def get_common(key):
+    return f'{COMMON}{key}'
 
 
-def get_common(keys):
-    return keys['common']
+def get_add(key):
+    return f'{ADD}{key}'
 
 
-def get_add(keys):
-    return keys['add']
-
-
-def get_remove(keys):
-    return keys['remove']
+def get_remove(key):
+    return f'{REMOVE}{key}'
 
 
 def get_diff(dict1, dict2):  # noqa: C901
     result = {}
     sorting = sorted(set(dict1) | set(dict2))
     for key in sorting:
-        format_keys = get_formated_keys(key)
         if key in dict1 and key in dict2:
             if dict1[key] == dict2[key]:
-                result[get_common(format_keys)] = dict1[key]
+                result[get_common(key)] = dict1[key]
             elif dict1[key] != dict2[key]:
                 if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):  # noqa: E501
-                    result[get_common(format_keys)] = get_diff(
+                    result[get_common(key)] = get_diff(
                         dict1[key],
                         dict2[key]
                     )
                 else:
-                    result[get_remove(format_keys)] = dict1[key]
-                    result[get_add(format_keys)] = dict2[key]
+                    result[get_remove(key)] = dict1[key]
+                    result[get_add(key)] = dict2[key]
         elif key in dict1:
-            result[get_remove(format_keys)] = dict1[key]
+            result[get_remove(key)] = dict1[key]
         elif key in dict2:
-            result[get_add(format_keys)] = dict2[key]
+            result[get_add(key)] = dict2[key]
 
     return result
