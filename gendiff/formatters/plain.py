@@ -1,25 +1,13 @@
-from gendiff.data_parser import COMMON, ADD, REMOVE
-
-
-def transform_bool(value):
-    if value is True:
-        return 'true'
-    elif value is False:
-        return 'false'
-    elif value is None:
+def to_str(value):
+    if isinstance(value, dict):
+        return '[complex value]'
+    if value is None:
         return 'null'
-    else:
+    if isinstance(value, bool):
+        return str(value).lower()
+    if isinstance(value, int):
         return value
-
-
-def get_plain_value(value):
-    if isinstance(value, (dict, list, tuple, set)):
-        value = "[complex value]"
-    elif isinstance(value, str):
-        value = f"'{value}'"
-    value = transform_bool(value)
-
-    return value
+    return f"'{value}'"
 
 
 def get_plain_path(path):
@@ -29,8 +17,8 @@ def get_plain_path(path):
 
 def message_plain(path, value1, value2):
     path = get_plain_path(path)
-    value1 = get_plain_value(value1)
-    value2 = get_plain_value(value2)
+    value1 = to_str(value1)
+    value2 = to_str(value2)
 
     added = f"Property '{path}' was added with value: {value1}"
     removed = f"Property '{path}' was removed"
